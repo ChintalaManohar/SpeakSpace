@@ -1,0 +1,46 @@
+[
+    {
+        "type": "group_discussion",
+        "topic": "The Art of Storytelling",
+        "startTime": "2026-02-17T10:00:00.000Z",
+        "duration": 45,
+        "level": "Beginner",
+        "maxSlots": 5,
+        "bookedSlots": 0,
+        "participants": [],
+        "meetLink": "https://meet.google.com/abc-defg-hij"
+    },
+    {
+        "type": "debate",
+        "topic": "Remote Work vs Office Life",
+        "startTime": "2026-02-17T14:00:00.000Z",
+        "duration": 60,
+        "level": "Intermediate",
+        "maxSlots": 6,
+        "bookedSlots": 0,
+        "participants": [],
+        "meetLink": "https://meet.google.com/xyz-uvw-lmn"
+    },
+    {
+        "type": "group_discussion",
+        "topic": "AI Ethics in 2026",
+        "startTime": "2026-02-18T18:00:00.000Z",
+        "duration": 50,
+        "level": "Advanced",
+        "maxSlots": 8,
+        "bookedSlots": 0,
+        "participants": [],
+        "meetLink": "https://meet.google.com/ghi-jkl-mno"
+    },
+    {
+        "type": "debate",
+        "topic": "Is Space Exploration Worth It?",
+        "startTime": "2026-02-19T11:00:00.000Z",
+        "duration": 60,
+        "level": "Beginner",
+        "maxSlots": 4,
+        "bookedSlots": 0,
+        "participants": [],
+        "meetLink": "https://meet.google.com/pqr-stu-vwx"
+    }
+]

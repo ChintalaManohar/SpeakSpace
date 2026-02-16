@@ -1,0 +1,576 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.profile-page-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f3f4f6;
+    /* Softer gray */
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+.profile-main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f3f4f6;
+}
+
+/* --- Container & Animations --- */
+
+.profile-card-centered {
+    max-width: 900px;
+    /* Slightly wider for better breathing room */
+    margin: 0 auto;
+    width: 100%;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Header & Cover --- */
+
+.profile-header-new {
+    width: 100%;
+    margin-bottom: 3rem;
+    /* More space for avatar overlap */
+    position: relative;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.profile-cover-new {
+    height: 240px;
+    /* Taller cover */
+    background: linear-gradient(1deg, #7adda0, #77d8ae, #77d599, #38ca55);
+    background-size: 300% 300%;
+    border-radius: 16px 16px 0 0;
+    animation: gradientShift 10s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.profile-avatar-wrapper {
+    position: absolute;
+    bottom: -60px;
+    left: 50px;
+    width: 140px;
+    /* Larger avatar */
+    height: 140px;
+    border-radius: 50%;
+    border: 5px solid white;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-avatar-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+}
+
+.profile-avatar-clickable {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.profile-avatar-clickable:hover .profile-avatar-img {
+    transform: scale(1.1);
+}
+
+.profile-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    color: #94deb5;
+    font-size: 3.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+.avatar-overlay span {
+    font-size: 1.8rem;
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.profile-avatar-clickable:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.profile-avatar-clickable:hover .avatar-overlay span {
+    transform: scale(1);
+}
+
+.avatar-upload-input {
+    display: none;
+}
+
+/* --- Sections --- */
+
+.profile-section-new {
+    background: white;
+    border: none;
+    /* Removed border */
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    /* Subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.user-details-card {
+    margin-top: -2rem;
+    /* Pull up to connect visually with header/avatar area if separate, creates layering effect */
+    /* Actually better to keep separate. Let's adjust margin-top to handle the visual gap properly */
+    margin-top: 4rem;
+    animation-delay: 0.1s;
+}
+
+.activity-card {
+    animation-delay: 0.2s;
+}
+
+.profile-section-new:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    /* Interactive feel */
+}
+
+/* --- Typography & Details --- */
+
+.user-details-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.user-details-content {
+    text-align: left;
+}
+
+.user-display-name {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.025em;
+    background: linear-gradient(to right, #111827, #4b5563);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-email {
+    color: #6b7280;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.user-joined {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    font-size: 0.875rem;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.user-about {
+    margin-top: 1.5rem;
+    color: #374151;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 600px;
+    padding-left: 1rem;
+    border-left: 4px solid #e5e7eb;
+}
+
+.edit-details-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.edit-details-btn:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Activity Section --- */
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.activity-row {
+    display: flex;
+    gap: 3rem;
+    /* Increase gap */
+}
+
+.activity-group {
+    flex: 1;
+}
+
+.activity-group h4 {
+    margin-bottom: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.activity-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.bar-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+.bar-item span:first-child {
+    width: 60px;
+    font-weight: 500;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 12px;
+    /* Thicker bars */
+    background-color: #f3f4f6;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #4f46e5);
+    border-radius: 6px;
+    width: 0;
+    /* JS sets this inline, but we want animation */
+    /* Since width comes from inline style, we rely on the transition */
+    transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+}
+
+/* Add a shimmer effect to bars */
+.progress-bar .fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.bar-item span:last-child {
+    width: 30px;
+    text-align: right;
+    font-weight: 700;
+    color: #111827;
+}
+
+.activity-divider {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, #e5e7eb, transparent);
+}
+
+/* --- Modal Styles --- */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    color: #111827;
+    font-weight: 700;
+    text-align: center;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #f9fafb;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #6366f1;
+    background-color: white;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.btn-cancel {
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #4b5563;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.btn-save {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(79, 70, 229, 0.3);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+.btn-save:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* --- Mobile Responsiveness --- */
+
+@media (max-width: 768px) {
+    .profile-section-new {
+        padding: 1.5rem;
+        margin-top: 5rem;
+        /* More space for avatar */
+    }
+
+    .profile-cover-new {
+        height: 180px;
+    }
+
+    .profile-avatar-wrapper {
+        width: 120px;
+        height: 120px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -60px;
+    }
+
+    .profile-avatar-wrapper:hover {
+        transform: translateX(-50%) translateY(-5px);
+    }
+
+    .user-details-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+        margin-top: 3rem;
+    }
+
+    .user-details-content {
+        text-align: center;
+    }
+
+    .user-about {
+        padding-left: 0;
+        border-left: none;
+        border-top: 4px solid #e5e7eb;
+        padding-top: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .edit-details-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .activity-row {
+        flex-direction: column;
+        gap: 2.5rem;
+        padding: 0;
+        border: none;
+    }
+
+    .activity-divider {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+    }
+
+    .activity-group {
+        padding: 0;
+    }
+}
