@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import TopNavbar from '../homepage/TopNavbar';
 import './Profile.css';
 
@@ -11,19 +11,15 @@ const Profile = () => {
         about: user.about || '',
         avatar: null
     });
-    const [preview, setPreview] = useState(user.avatar ? `http://localhost:5000${user.avatar}` : null);
+    const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
+    const [preview, setPreview] = useState(user.avatar ? `${BASE_URL}${user.avatar}` : null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         // Fetch latest user data
         const fetchUser = async () => {
             try {
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`
-                    }
-                };
-                const { data } = await axios.get('http://localhost:5000/api/auth/me', config);
+                const { data } = await api.get('/auth/me');
 
                 // Merge existing user data (like token) with new profile data
                 const updatedUser = { ...user, ...data };
@@ -40,7 +36,7 @@ const Profile = () => {
                     avatar: null
                 });
                 if (data.avatar) {
-                    setPreview(`http://localhost:5000${data.avatar}`);
+                    setPreview(`${BASE_URL}${data.avatar}`);
                 }
             } catch (error) {
                 console.error("Error fetching user profile", error);
@@ -83,12 +79,11 @@ const Profile = () => {
         try {
             const config = {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`
+                    'Content-Type': 'multipart/form-data'
                 }
             };
 
-            const response = await axios.put('http://localhost:5000/api/auth/profile', data, config);
+            const response = await api.put('/auth/profile', data, config);
 
             // Update local storage and state
             const updatedUser = { ...user, ...response.data };
@@ -116,7 +111,7 @@ const Profile = () => {
             about: user.about || '',
             avatar: null
         });
-        setPreview(user.avatar ? `http://localhost:5000${user.avatar}` : null);
+        setPreview(user.avatar ? `${BASE_URL}${user.avatar}` : null);
     };
 
     return (

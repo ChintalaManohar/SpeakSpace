@@ -1,5 +1,6 @@
 import React from 'react';
 import TopNavbar from './TopNavbar';
+import api from '../../api/axios';
 import './dashboard.css';
 
 const Progress = () => {
@@ -11,21 +12,8 @@ const Progress = () => {
     React.useEffect(() => {
         const fetchStats = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) return;
-
-                const response = await fetch('http://localhost:5000/api/feedback/stats', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch stats');
-                }
-
-                const data = await response.json();
-                setStats(data);
+                const response = await api.get('/feedback/stats');
+                setStats(response.data);
             } catch (err) {
                 console.error("Error fetching stats:", err);
                 setError(err.message);

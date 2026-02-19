@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import './VerifyEmail.css'; // We'll create a simple CSS file
 
 const VerifyEmail = () => {
@@ -13,7 +13,7 @@ const VerifyEmail = () => {
     useEffect(() => {
         const verifyEmail = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/auth/verify-email/${token}`);
+                const response = await api.get(`/auth/verify-email/${token}`);
                 setMessage(response.data.message);
                 setStatus('success');
             } catch (error) {

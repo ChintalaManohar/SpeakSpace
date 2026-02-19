@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 
 const AdminSessions = () => {
     const [sessions, setSessions] = useState([]);
@@ -21,14 +21,9 @@ const AdminSessions = () => {
         meetLink: ''
     });
 
-    const token = localStorage.getItem('token');
-    const config = {
-        headers: { Authorization: `Bearer ${token}` }
-    };
-
     const fetchSessions = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/admin/sessions', config);
+            const { data } = await api.get('/admin/sessions');
             setSessions(data);
             setLoading(false);
         } catch (error) {
@@ -44,7 +39,7 @@ const AdminSessions = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this session?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/admin/sessions/${id}`, config);
+                await api.delete(`/admin/sessions/${id}`);
                 fetchSessions();
             } catch (error) {
                 console.error('Error deleting session:', error);
@@ -70,10 +65,10 @@ const AdminSessions = () => {
             delete payload.ampm;
 
             if (editSessionId) {
-                await axios.put(`http://localhost:5000/api/admin/sessions/${editSessionId}`, payload, config);
+                await api.put(`/admin/sessions/${editSessionId}`, payload);
                 alert('Session updated successfully');
             } else {
-                await axios.post('http://localhost:5000/api/admin/sessions', payload, config);
+                await api.post('/admin/sessions', payload);
                 alert('Session created successfully');
             }
 

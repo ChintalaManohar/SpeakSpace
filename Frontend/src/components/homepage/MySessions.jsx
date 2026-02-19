@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import TopNavbar from './TopNavbar';
 import Sidebar from './Sidebar';
 import './dashboard.css';
@@ -17,13 +17,7 @@ const MySessions = () => {
         const fetchMySessions = async () => {
             setLoading(true);
             try {
-                const token = localStorage.getItem('token');
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                };
-                const response = await axios.get('http://localhost:5000/api/sessions/my-sessions', config);
+                const response = await api.get('/sessions/my-sessions');
                 setBookedSessions(response.data);
                 setError(null);
             } catch (err) {

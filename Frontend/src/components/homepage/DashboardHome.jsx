@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import TopNavbar from './TopNavbar';
 import pic from '../../assets/people.png';
+import api from '../../api/axios';
 import { Mic, Calendar, TrendingUp, UserPen, Lightbulb, Map } from 'lucide-react';
 import './dashboard.css';
 
@@ -17,19 +18,8 @@ const DashboardHome = () => {
     React.useEffect(() => {
         const fetchStats = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) return;
-
-                const response = await fetch('http://localhost:5000/api/feedback/stats', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setStats(data);
-                }
+                const response = await api.get('/feedback/stats');
+                setStats(response.data);
             } catch (err) {
                 console.error("Error fetching dashboard stats:", err);
             } finally {

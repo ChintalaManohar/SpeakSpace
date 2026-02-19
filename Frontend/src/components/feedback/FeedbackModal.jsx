@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import FeedbackUserCard from './FeedbackUserCard';
 import './Feedback.css';
 
@@ -17,16 +17,7 @@ const FeedbackModal = ({ sessionId, currentUserId, onClose }) => {
     useEffect(() => {
         const fetchSessionDetails = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) return;
-
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                };
-
-                const res = await axios.get(`http://localhost:5000/api/sessions/${sessionId}`, config);
+                const res = await api.get(`/sessions/${sessionId}`);
                 const sessionFn = res.data;
 
                 // Filter out current user from attendedParticipants
@@ -111,14 +102,7 @@ const FeedbackModal = ({ sessionId, currentUserId, onClose }) => {
         }));
 
         try {
-            const token = localStorage.getItem('token');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            };
-
-            await axios.post('http://localhost:5000/api/feedback', { feedbackArray }, config);
+            await api.post('/feedback', { feedbackArray });
 
             alert('Feedback submitted successfully!');
             onClose(); // In VideoRoom this redirects to my-sessions

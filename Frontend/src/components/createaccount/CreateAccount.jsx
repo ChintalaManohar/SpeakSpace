@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import { GoogleLogin } from '@react-oauth/google';
 import '../../index.css';
 
@@ -108,7 +108,7 @@ const CreateAccount = () => {
         setLoading(true);
 
         try {
-            await axios.post('http://localhost:5000/api/auth/register', {
+            await api.post('/auth/register', {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password
@@ -149,7 +149,7 @@ const CreateAccount = () => {
         setLoading(true);
         try {
             const { credential } = credentialResponse;
-            const response = await axios.post('http://localhost:5000/api/auth/google', {
+            const response = await api.post('/auth/google', {
                 token: credential
             });
 

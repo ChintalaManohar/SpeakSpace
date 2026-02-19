@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './dashboard.css';
 
-import axios from 'axios';
+import api from '../../api/axios';
 
 const SessionCard = ({ session }) => {
     const [isBooked, setIsBooked] = useState(session.isBooked || false);
@@ -12,19 +12,7 @@ const SessionCard = ({ session }) => {
         if (!isBooked && slotsLeft > 0) {
             setLoading(true);
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    alert('Please login to book a session');
-                    return;
-                }
-
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                };
-
-                await axios.post(`http://localhost:5000/api/sessions/${session.id}/book`, {}, config);
+                await api.post(`/sessions/${session.id}/book`, {});
 
                 setIsBooked(true);
                 setSlotsLeft(prev => Math.max(0, prev - 1));

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import './Settings.css';
 
 const Settings = () => {
@@ -27,8 +27,7 @@ const Settings = () => {
                 const token = localStorage.getItem('token');
                 if (!token) return;
 
-                const config = { headers: { Authorization: `Bearer ${token}` } };
-                const res = await axios.get('http://localhost:5000/api/auth/me', config);
+                const res = await api.get('/auth/me');
 
                 setUser(res.data);
                 if (res.data.settings) {
@@ -66,12 +65,10 @@ const Settings = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-
-            await axios.put('http://localhost:5000/api/auth/change-password', {
+            await api.put('/auth/change-password', {
                 currentPassword: passwords.currentPassword,
                 newPassword: passwords.newPassword
-            }, config);
+            });
 
             setMessage({ type: 'success', text: 'Password updated successfully' });
             setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -84,8 +81,7 @@ const Settings = () => {
     const resendVerification = async () => {
         try {
             const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.post('http://localhost:5000/api/auth/resend-verification', {}, config);
+            await api.post('/auth/resend-verification', {});
             setMessage({ type: 'success', text: 'Verification email sent!' });
         } catch (err) {
             setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to send email' });
@@ -128,8 +124,7 @@ const Settings = () => {
     const saveSettings = async (newSettings) => {
         try {
             const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.put('http://localhost:5000/api/auth/settings', { settings: newSettings }, config);
+            await api.put('/auth/settings', { settings: newSettings });
             // Optional: Update local user context if exists
         } catch (err) {
             console.error("Failed to save settings", err);

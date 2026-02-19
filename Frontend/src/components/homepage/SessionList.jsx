@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import SessionCard from './SessionCard';
 import './dashboard.css';
 
@@ -20,15 +20,14 @@ const SessionList = ({ activeTab }) => {
                 const backendType = typeMapping[activeTab] || 'group_discussion';
 
                 // Fetch all sessions
-                const sessionsPromise = axios.get(`http://localhost:5000/api/sessions?type=${backendType}`);
+                const sessionsPromise = api.get(`/sessions?type=${backendType}`);
 
                 // Fetch user's booked sessions to identify what they've booked
                 const token = localStorage.getItem('token');
                 let bookedPromise = Promise.resolve({ data: [] });
 
                 if (token) {
-                    const config = { headers: { Authorization: `Bearer ${token}` } };
-                    bookedPromise = axios.get('http://localhost:5000/api/sessions/my-sessions', config)
+                    bookedPromise = api.get('/sessions/my-sessions')
                         .catch(err => {
                             console.warn("Failed to fetch booked sessions:", err);
                             return { data: [] }; // Return empty data on failure
