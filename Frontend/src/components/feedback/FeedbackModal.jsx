@@ -4,34 +4,72 @@ import axios from 'axios';
 import FeedbackUserCard from './FeedbackUserCard';
 import './Feedback.css';
 
-const FeedbackModal = ({ sessionId, participants, currentUserId, onClose }) => {
+const FeedbackModal = ({ sessionId, currentUserId, onClose }) => {
     const navigate = useNavigate();
     const [feedbackData, setFeedbackData] = useState({});
     const [openUserId, setOpenUserId] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [peers, setPeers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Filter out current user from participants
-    const peers = participants.filter(p => p.id !== currentUserId);
-
-    // Initialize feedback state
+    // Fetch session details to get attendedParticipants
     useEffect(() => {
-        const initialFeedback = {};
-        peers.forEach(peer => {
-            initialFeedback[peer.id] = {
-                confidence: 0,
-                clarity: 0,
-                listening: 0,
-                comment: ''
-            };
-        });
-        setFeedbackData(initialFeedback);
+        const fetchSessionDetails = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
 
-        // Open first user by default if exists
-        if (peers.length > 0) {
-            setOpenUserId(peers[0].id);
-        }
-    }, [participants, currentUserId]);
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                };
+
+                const res = await axios.get(`http://localhost:5000/api/sessions/${sessionId}`, config);
+                const sessionFn = res.data;
+
+                // Filter out current user from attendedParticipants
+                // Note: sessionFn.attendedParticipants should be populated
+                const attendees = sessionFn.attendedParticipants || [];
+                const filteredPeers = attendees.filter(p => p._id !== currentUserId && p.id !== currentUserId);
+
+                // Map to consistent format if needed (Mongo uses _id, but some parts might use id)
+                const mappedPeers = filteredPeers.map(p => ({
+                    id: p._id || p.id,
+                    name: p.name,
+                    email: p.email
+                }));
+
+                setPeers(mappedPeers);
+
+                // Initialize feedback state for new peers
+                const initialFeedback = {};
+                mappedPeers.forEach(peer => {
+                    initialFeedback[peer.id] = {
+                        confidence: 0,
+                        clarity: 0,
+                        listening: 0,
+                        comment: ''
+                    };
+                });
+                setFeedbackData(initialFeedback);
+
+                // Open first user by default if exists
+                if (mappedPeers.length > 0) {
+                    setOpenUserId(mappedPeers[0].id);
+                }
+
+            } catch (err) {
+                console.error("Error fetching session details:", err);
+                setError("Failed to load participant list.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSessionDetails();
+    }, [sessionId, currentUserId]);
 
     const handleFeedbackChange = (userId, field, value) => {
         setFeedbackData(prev => ({

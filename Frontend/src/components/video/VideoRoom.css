@@ -1,43 +1,51 @@
 .video-room-container {
     padding: 20px;
     font-family: Arial, sans-serif;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: #111827;
 }
 
 .video-room-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 15px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 10px 20px;
+    background: rgba(31, 41, 55, 0.95);
+    border-bottom: 1px solid #374151;
+    color: white;
+    height: 60px;
+    flex-shrink: 0;
 }
 
 .room-title {
     margin: 0;
-    font-size: 24px;
-    color: #1f2937;
+    font-size: 18px;
+    color: #f3f4f6;
+    font-weight: 600;
 }
 
 .status-indicator {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 5px;
+    gap: 8px;
+    margin-top: 2px;
 }
 
 .status-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
 }
 
 .status-connected {
     background-color: #10b981;
+    box-shadow: 0 0 4px #10b981;
 }
 
 .status-disconnected {
@@ -45,24 +53,25 @@
 }
 
 .status-text {
-    font-size: 14px;
-    color: #6b7280;
+    font-size: 12px;
+    color: #9ca3af;
 }
 
 .separator {
-    font-size: 14px;
-    color: #e5e7eb;
+    font-size: 12px;
+    color: #4b5563;
 }
 
 .leave-btn {
-    padding: 10px 20px;
+    padding: 8px 16px;
     background: #ef4444;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
 .leave-btn:hover {
@@ -71,17 +80,76 @@
 
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: 10px;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 10px;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    /* Pack columns together */
+    align-content: center;
+    /* Pack rows together */
+}
+
+/* 1 User (Just you) */
+.video-grid.count-1 {
+    grid-template-columns: minmax(0, auto);
+    grid-template-rows: minmax(0, 1fr);
+}
+
+/* 2 Users */
+.video-grid.count-2 {
+    grid-template-columns: repeat(2, minmax(0, auto));
+    grid-template-rows: minmax(0, 1fr);
+}
+
+/* 3-4 Users (2x2) */
+.video-grid[class*="count-3"],
+.video-grid[class*="count-4"] {
+    grid-template-columns: repeat(2, minmax(0, auto));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+/* 5-6 Users (3x2) */
+.video-grid[class*="count-5"],
+.video-grid[class*="count-6"] {
+    grid-template-columns: repeat(3, minmax(0, auto));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+/* 7-9 Users (3x3) */
+.video-grid[class*="count-7"],
+.video-grid[class*="count-8"],
+.video-grid[class*="count-9"] {
+    grid-template-columns: repeat(3, minmax(0, auto));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+/* 10+ Users */
+.video-grid[class*="count-1"]0,
+.video-grid[class*="count-1"]1,
+.video-grid[class*="count-1"]2 {
+    grid-template-columns: repeat(4, minmax(0, auto));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
 }
 
 .video-wrapper {
     position: relative;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
     aspect-ratio: 16/9;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .local-video-wrapper {

@@ -9,7 +9,7 @@ const SessionCard = ({ session }) => {
     const [slotsLeft, setSlotsLeft] = useState(session.slotsLeft);
 
     const handleBooking = async () => {
-        if (!isBooked && !session.isLive && slotsLeft > 0) {
+        if (!isBooked && slotsLeft > 0) {
             setLoading(true);
             try {
                 const token = localStorage.getItem('token');
@@ -84,13 +84,41 @@ const SessionCard = ({ session }) => {
 
             {/* Right: Button */}
             <div className="card-right">
-                <button
-                    className={`action-btn ${isBooked ? 'booked-btn' : (slotsLeft === 0 ? 'full-btn' : 'book-btn-dark')}`}
-                    onClick={handleBooking}
-                    disabled={loading || isBooked || slotsLeft === 0}
-                >
-                    {loading ? 'Booking...' : (isBooked ? 'Booked' : (slotsLeft === 0 ? 'Full' : 'Book Slot'))}
-                </button>
+                {(() => {
+                    const isPast = new Date(session.startTime) < new Date();
+                    const isFull = slotsLeft === 0;
+
+                    let btnClass = 'book-btn-dark';
+                    let btnText = 'Book Slot';
+                    let isDisabled = false;
+
+                    if (loading) {
+                        btnText = 'Booking...';
+                        isDisabled = true;
+                    } else if (isBooked) {
+                        btnClass = 'booked-btn';
+                        btnText = 'Booked';
+                        isDisabled = true;
+                    } else if (isPast) {
+                        btnClass = 'full-btn'; // Use grey/disabled style
+                        btnText = 'Started'; // Or 'Completed'
+                        isDisabled = true;
+                    } else if (isFull) {
+                        btnClass = 'full-btn';
+                        btnText = 'Full';
+                        isDisabled = true;
+                    }
+
+                    return (
+                        <button
+                            className={`action-btn ${btnClass}`}
+                            onClick={handleBooking}
+                            disabled={isDisabled}
+                        >
+                            {btnText}
+                        </button>
+                    );
+                })()}
             </div>
         </div>
     );

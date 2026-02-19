@@ -25,6 +25,7 @@ const { errorHandler } = require('./middleware/errorMiddleware');
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/sessions', require('./routes/sessionRoutes'));
 app.use('/api/feedback', require('./routes/feedbackRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 app.use(errorHandler);
 

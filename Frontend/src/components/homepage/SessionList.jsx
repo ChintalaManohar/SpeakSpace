@@ -71,7 +71,7 @@ const SessionList = ({ activeTab }) => {
 
     // We can map the data here before rendering
     // Filter out Live sessions (and Completed, though backend already does that)
-    const availableSessions = sessions.filter(s => s.status !== 'Live');
+    const availableSessions = sessions;
 
     const mappedSessions = availableSessions.map(session => {
         const startTime = new Date(session.startTime);
@@ -89,7 +89,8 @@ const SessionList = ({ activeTab }) => {
             level: session.level,
             slotsLeft: session.maxSlots - session.bookedSlots,
             totalSlots: session.maxSlots,
-            isLive: session.status === 'Live', // Should be false now due to filter
+            isLive: session.status === 'Live',
+            startTime: session.startTime,
             isBooked: bookedSessionIds.has(session._id)
         };
     });

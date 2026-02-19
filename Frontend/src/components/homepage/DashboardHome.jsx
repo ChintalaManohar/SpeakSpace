@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import TopNavbar from './TopNavbar';
 import pic from '../../assets/people.png';
+import { Mic, Calendar, TrendingUp, UserPen, Lightbulb, Map } from 'lucide-react';
 import './dashboard.css';
 
 const DashboardHome = () => {
@@ -110,19 +111,27 @@ const DashboardHome = () => {
                             <h2 className="section-title">Quick Actions</h2>
                             <div className="actions-grid">
                                 <Link to="/sessions" className="action-card">
-                                    <div className="action-icon">🎤</div>
+                                    <div className="action-icon">
+                                        <Mic size={28} color="#4f46e5" />
+                                    </div>
                                     <span>Explore Sessions</span>
                                 </Link>
                                 <Link to="/my-sessions" className="action-card">
-                                    <div className="action-icon">📅</div>
+                                    <div className="action-icon">
+                                        <Calendar size={28} color="#3b82f6" />
+                                    </div>
                                     <span>My Sessions</span>
                                 </Link>
                                 <Link to="/progress" className="action-card">
-                                    <div className="action-icon">📈</div>
+                                    <div className="action-icon">
+                                        <TrendingUp size={28} color="#059669" />
+                                    </div>
                                     <span>View Progress</span>
                                 </Link>
                                 <Link to="/profile" className="action-card">
-                                    <div className="action-icon">👤</div>
+                                    <div className="action-icon">
+                                        <UserPen size={28} color="#7c3aed" />
+                                    </div>
                                     <span>Edit Profile</span>
                                 </Link>
                             </div>
@@ -131,7 +140,9 @@ const DashboardHome = () => {
                         {/* 4. Suggestions / Tip Section */}
                         <section className="suggestions-section">
                             <div className="suggestion-box">
-                                <div className="suggestion-icon">💡</div>
+                                <div className="suggestion-icon">
+                                    <Lightbulb size={24} color="#db2777" />
+                                </div>
                                 <div className="suggestion-content">
                                     <h4>Suggestions for you</h4>
                                     <ul>

@@ -55,6 +55,13 @@ module.exports = (io) => {
                         socket.emit('error', 'Session not found');
                         return;
                     }
+
+                    // Track attendance: Add user to attendedParticipants if not already there
+                    if (!session.attendedParticipants.includes(decoded.id)) {
+                        session.attendedParticipants.push(decoded.id);
+                        await session.save();
+                        console.log(`Added user ${decoded.id} to attendedParticipants for session ${sessionId}`);
+                    }
                 }
 
                 const room = io.sockets.adapter.rooms.get(sessionId);

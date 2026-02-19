@@ -45,6 +45,20 @@ const userSchema = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    settings: {
+        notifications: {
+            sessionReminders: { type: Boolean, default: true },
+            feedback: { type: Boolean, default: true }
+        },
+        media: {
+            defaultMic: { type: Boolean, default: true },
+            defaultCamera: { type: Boolean, default: true }
+        },
+        privacy: {
+            profileVisibility: { type: String, enum: ['public', 'private'], default: 'public' }
+        },
+        theme: { type: String, enum: ['light', 'dark'], default: 'light' }
     }
 });
 

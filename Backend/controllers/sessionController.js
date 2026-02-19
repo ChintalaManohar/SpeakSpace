@@ -32,13 +32,17 @@ exports.getSessions = async (req, res) => {
 
         // const now = new Date(); // Unused
 
-        const processedSessions = sessions.map(session => {
+        const processedSessions = sessions.filter(session => {
+            const startOfToday = new Date();
+            startOfToday.setHours(0, 0, 0, 0);
+            return new Date(session.startTime) >= startOfToday;
+        }).map(session => {
             const status = getSessionStatus(session);
             return {
                 ...session.toObject(),
                 status
             };
-        }).filter(session => session.status !== 'Completed'); // Exclude completed by default
+        });
 
         res.json(processedSessions);
     } catch (err) {
@@ -98,6 +102,26 @@ exports.getMySessions = async (req, res) => {
         });
 
         res.json(processedSessions);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+// @desc    Get session by ID
+// @route   GET /api/sessions/:id
+// @access  Private
+exports.getSessionById = async (req, res) => {
+    try {
+        const session = await Session.findById(req.params.id)
+            .populate('participants', 'name email') // Populate booked participants (optional, useful for debugging)
+            .populate('attendedParticipants', 'name email'); // Populate actual attendees
+
+        if (!session) {
+            return res.status(404).json({ message: 'Session not found' });
+        }
+
+        res.json(session);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server Error' });

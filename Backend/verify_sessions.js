@@ -13,8 +13,10 @@ const verifySessions = async () => {
 
         if (count > 0) {
             const sessions = await Session.find({});
-            console.log("First 3 sessions:");
-            console.log(JSON.stringify(sessions.slice(0, 3), null, 2));
+            console.log("Sessions found:");
+            sessions.forEach(s => {
+                console.log(`- ID: ${s._id}, Topic: ${s.topic}, Type: ${s.type}, Status: ${s.status}, Start: ${s.startTime}`);
+            });
         } else {
             console.log("No sessions found in database.");
         }

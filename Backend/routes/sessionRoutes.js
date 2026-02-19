@@ -7,5 +7,6 @@ const { protect } = require('../middleware/authMiddleware');
 router.get('/', sessionController.getSessions);
 router.get('/my-sessions', protect, sessionController.getMySessions);
 router.post('/:id/book', protect, sessionController.bookSession);
+router.get('/:id', protect, sessionController.getSessionById);
 
 module.exports = router;

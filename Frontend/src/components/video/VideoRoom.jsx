@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
+import { Mic, MicOff, Camera, CameraOff, PhoneOff } from 'lucide-react';
 import FeedbackModal from '../feedback/FeedbackModal';
 import './VideoRoom.css';
 
@@ -10,6 +11,10 @@ const VideoRoom = () => {
     const [status, setStatus] = useState('Connecting...');
     const [logs, setLogs] = useState([]);
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+
+    // Media State
+    const [isMuted, setIsMuted] = useState(false);
+    const [isVideoOff, setIsVideoOff] = useState(false);
 
     // Refs
     const socketRef = useRef();
@@ -274,13 +279,19 @@ const VideoRoom = () => {
 
     const toggleMute = () => {
         if (stream) {
-            stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+            stream.getAudioTracks().forEach(track => {
+                track.enabled = !track.enabled;
+                setIsMuted(!track.enabled);
+            });
         }
     };
 
     const toggleVideo = () => {
         if (stream) {
-            stream.getVideoTracks().forEach(track => track.enabled = !track.enabled);
+            stream.getVideoTracks().forEach(track => {
+                track.enabled = !track.enabled;
+                setIsVideoOff(!track.enabled);
+            });
         }
     };
 
@@ -316,14 +327,16 @@ const VideoRoom = () => {
                     <button
                         onClick={leaveRoom}
                         className="leave-btn"
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                     >
+                        <PhoneOff size={18} />
                         Leave Session
                     </button>
                 </div>
             </div>
 
             {/* Video Grid */}
-            <div className="video-grid">
+            <div className={`video-grid count-${remoteStreams.length + 1}`}>
                 {/* Local Video */}
                 <div className="video-wrapper local-video-wrapper">
                     <video
@@ -331,10 +344,11 @@ const VideoRoom = () => {
                         muted
                         ref={userVideo}
                         autoPlay
-                        className="video-element local-video"
+                        className={`video-element local-video ${isVideoOff ? 'video-hidden' : ''}`}
                     />
+                    {isVideoOff && <div className="video-placeholder">Camera Off</div>}
                     <div className="user-label">
-                        You ({displayUserId})
+                        You ({displayUserId}) {isMuted && <MicOff size={14} color="red" />}
                     </div>
                 </div>
 
@@ -348,24 +362,23 @@ const VideoRoom = () => {
             <div className="controls-container">
                 <button
                     onClick={toggleMute}
-                    className="control-btn"
-                    title="Toggle Mute"
+                    className={`control-btn ${isMuted ? 'control-btn-active' : ''}`}
+                    title={isMuted ? "Unmute" : "Mute"}
                 >
-                    🎤
+                    {isMuted ? <MicOff /> : <Mic />}
                 </button>
                 <button
                     onClick={toggleVideo}
-                    className="control-btn"
-                    title="Toggle Video"
+                    className={`control-btn ${isVideoOff ? 'control-btn-active' : ''}`}
+                    title={isVideoOff ? "Turn Camera On" : "Turn Camera Off"}
                 >
-                    📷
+                    {isVideoOff ? <CameraOff /> : <Camera />}
                 </button>
             </div>
 
             {showFeedbackModal && (
                 <FeedbackModal
                     sessionId={sessionId}
-                    participants={Array.from(allParticipants.current.values())}
                     currentUserId={user._id || user.id} // Ensure we have the DB ID from localStorage
                     onClose={() => navigate('/my-sessions')}
                 />

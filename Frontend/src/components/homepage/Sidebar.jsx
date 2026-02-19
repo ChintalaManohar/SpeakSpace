@@ -1,4 +1,5 @@
 import React from 'react';
+import { Users, MessageSquareText } from 'lucide-react';
 import './dashboard.css';
 
 const Sidebar = ({ activeTab, setActiveTab, title = 'Sessions' }) => {
@@ -10,7 +11,7 @@ const Sidebar = ({ activeTab, setActiveTab, title = 'Sessions' }) => {
                 className={`sidebar-item ${activeTab === 'group' ? 'active' : ''}`}
                 onClick={() => setActiveTab('group')}
             >
-                <span style={{ fontSize: '1.2rem' }}>👥</span>
+                <Users size={20} />
                 Group Discussion
             </div>
 
@@ -18,7 +19,7 @@ const Sidebar = ({ activeTab, setActiveTab, title = 'Sessions' }) => {
                 className={`sidebar-item ${activeTab === 'debate' ? 'active' : ''}`}
                 onClick={() => setActiveTab('debate')}
             >
-                <span style={{ fontSize: '1.2rem' }}>⚖️</span>
+                <MessageSquareText size={20} />
                 Debate
             </div>
         </aside>

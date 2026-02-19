@@ -7,16 +7,17 @@ import '../../index.css';
 const Login = () => {
     const [formData, setFormData] = useState({
         email: '',
-        password: ''
+        password: '',
+        isAdmin: false
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
-    // Better approach: use name attribute
     const handleNameChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        setFormData({ ...formData, [e.target.name]: value });
     };
 
     const handleSubmit = async (e) => {
@@ -29,7 +30,11 @@ const Login = () => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data));
             setLoading(false);
-            navigate('/dashboard');
+            if (response.data.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (err) {
             setLoading(false);
             setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -175,11 +180,23 @@ const Login = () => {
                                 </svg>
                             ) : (
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
                             )}
                         </span>
+                    </div>
+
+                    <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
+                        <input
+                            type="checkbox"
+                            name="isAdmin"
+                            id="isAdmin"
+                            checked={formData.isAdmin}
+                            onChange={handleNameChange}
+                            style={{ marginRight: '0.5rem' }}
+                        />
+                        <label htmlFor="isAdmin" style={{ ...labelStyle, marginBottom: 0, cursor: 'pointer' }}>Log in as Admin</label>
                     </div>
 
                     <button

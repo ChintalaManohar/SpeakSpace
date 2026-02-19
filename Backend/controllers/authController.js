@@ -92,7 +92,23 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, isAdmin } = req.body;
+
+    // Admin Login Logic
+    if (isAdmin) {
+        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+            res.json({
+                name: 'Admin',
+                email: email,
+                role: 'admin',
+                token: generateToken(null, 'admin')
+            });
+            return;
+        } else {
+            res.status(401);
+            throw new Error('Invalid Admin Credentials');
+        }
+    }
 
     // Check for user email
     const user = await User.findOne({ email });
@@ -256,11 +272,96 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 // Generate JWT
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, role = 'user') => {
+    const payload = { role };
+    if (id) payload.id = id;
+
+    return jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: '30d'
     });
 };
+
+// @desc    Change password
+// @route   PUT /api/auth/change-password
+// @access  Private
+const changePassword = asyncHandler(async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (user && (await bcrypt.compare(currentPassword, user.password))) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        await user.save();
+        res.json({ message: 'Password updated successfully' });
+    } else {
+        res.status(401);
+        throw new Error('Invalid current password');
+    }
+});
+
+// @desc    Resend verification email
+// @route   POST /api/auth/resend-verification
+// @access  Private
+const resendVerification = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user.isVerified) {
+        res.status(400);
+        throw new Error('User is already verified');
+    }
+
+    const verificationToken = crypto.randomBytes(20).toString('hex');
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
+    await user.save();
+
+    const verificationUrl = `http://localhost:5173/verify-email/${verificationToken}`;
+
+    const message = `
+        <h1>Verify Your Email</h1>
+        <p>Please click the link below to verify your email address:</p>
+        <a href="${verificationUrl}" clicktracking=off>${verificationUrl}</a>
+        <p>This link expires in 15 minutes.</p>
+    `;
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'SpeakSpace Account Verification',
+            message
+        });
+        res.json({ message: 'Verification email sent' });
+    } catch (error) {
+        user.verificationToken = undefined;
+        user.verificationTokenExpires = undefined;
+        await user.save();
+        res.status(500);
+        throw new Error('Email could not be sent');
+    }
+});
+
+// @desc    Update user settings
+// @route   PUT /api/user/settings
+// @access  Private
+const updateSettings = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        user.settings = req.body.settings || user.settings;
+        const updatedUser = await user.save();
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            avatar: updatedUser.avatar,
+            settings: updatedUser.settings,
+            token: generateToken(updatedUser._id)
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
 
 module.exports = {
     registerUser,
@@ -269,4 +370,7 @@ module.exports = {
     verifyEmail,
     getMe,
     updateUserProfile,
+    changePassword,
+    resendVerification,
+    updateSettings
 };
