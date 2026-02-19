@@ -118,19 +118,35 @@ const Progress = () => {
                             <div className="progress-card recent-feedback-card">
                                 <h2 className="card-heading">Recent Feedback</h2>
                                 {stats?.recentFeedback?.length > 0 ? (
-                                    <div className="recent-feedback-list">
+                                    <div className="recent-feedback-grid">
                                         {stats.recentFeedback.map(item => (
-                                            <div key={item.id} className="feedback-item">
-                                                <div className="feedback-item-header">
-                                                    <span className="session-topic">{item.sessionTopic}</span>
+                                            <div key={item.id} className="feedback-card-item">
+                                                <div className="feedback-header">
+                                                    <span className="feedback-topic">{item.sessionTopic}</span>
                                                     <span className="feedback-date">{new Date(item.date).toLocaleDateString()}</span>
                                                 </div>
-                                                <div className="feedback-scores-mini">
-                                                    <span>Conf: {item.confidence}</span>
-                                                    <span>Clar: {item.clarity}</span>
-                                                    <span>List: {item.listening}</span>
+
+                                                <div className="feedback-scores-badges">
+                                                    <div className="score-badge" title="Confidence">
+                                                        <span className="badge-label">Conf</span>
+                                                        <span className="badge-value">{item.confidence}/5</span>
+                                                    </div>
+                                                    <div className="score-badge" title="Clarity">
+                                                        <span className="badge-label">Clar</span>
+                                                        <span className="badge-value">{item.clarity}/5</span>
+                                                    </div>
+                                                    <div className="score-badge" title="Listening">
+                                                        <span className="badge-label">List</span>
+                                                        <span className="badge-value">{item.listening}/5</span>
+                                                    </div>
                                                 </div>
-                                                {item.comment && <p className="feedback-comment">"{item.comment}"</p>}
+
+                                                {item.comment && (
+                                                    <div className="feedback-comment-box">
+                                                        <div className="quote-icon">"</div>
+                                                        <p>{item.comment}</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         ))}
                                     </div>

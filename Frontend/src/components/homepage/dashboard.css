@@ -1268,3 +1268,102 @@
         order: 1;
     }
 }
+
+/* --- Recent Feedback UI --- */
+
+.recent-feedback-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feedback-card-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.feedback-card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
+.feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.feedback-topic {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 1.05rem;
+}
+
+.feedback-date {
+    font-size: 0.85rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+}
+
+.feedback-scores-badges {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.score-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.score-badge .badge-label {
+    color: #64748b;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.score-badge .badge-value {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.feedback-comment-box {
+    background: #f0f9ff;
+    padding: 1rem 1rem 1rem 2.5rem;
+    border-radius: 8px;
+    position: relative;
+    color: #334155;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    border-left: 4px solid #3b82f6;
+}
+
+.quote-icon {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.75rem;
+    font-size: 2.5rem;
+    color: #bfdbfe;
+    font-family: serif;
+    line-height: 1;
+}
