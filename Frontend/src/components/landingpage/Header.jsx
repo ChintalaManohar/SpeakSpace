@@ -13,8 +13,8 @@ const Header = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
-    // Check for user in localStorage
-    const storedUser = localStorage.getItem('user');
+    // Check for user in sessionStorage
+    const storedUser = sessionStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -24,8 +24,8 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     setUser(null);
     navigate('/');
   };

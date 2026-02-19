@@ -4,7 +4,7 @@ import TopNavbar from '../homepage/TopNavbar';
 import './Profile.css';
 
 const Profile = () => {
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {});
+    const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user')) || {});
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         name: user.name || '',
@@ -14,42 +14,52 @@ const Profile = () => {
     const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
     const [preview, setPreview] = useState(user.avatar ? `${BASE_URL}${user.avatar}` : null);
     const [loading, setLoading] = useState(false);
+    const [activityStats, setActivityStats] = useState({
+        week: { group_discussion: 0, debate: 0 },
+        month: { group_discussion: 0, debate: 0 },
+        year: { group_discussion: 0, debate: 0 }
+    });
 
     useEffect(() => {
-        // Fetch latest user data
-        const fetchUser = async () => {
+        // Fetch latest user data and activity stats
+        const fetchData = async () => {
             try {
-                const { data } = await api.get('/auth/me');
+                // Fetch user profile
+                const { data: userData } = await api.get('/auth/me');
+
+                // Fetch activity stats
+                const { data: activityData } = await api.get('/auth/activity');
+                setActivityStats(activityData);
 
                 // Merge existing user data (like token) with new profile data
-                const updatedUser = { ...user, ...data };
+                const updatedUser = { ...user, ...userData };
 
                 // Update state
                 setUser(updatedUser);
 
-                // Persist to local storage so data survives refresh
-                localStorage.setItem('user', JSON.stringify(updatedUser));
+                // Persist to session storage so data survives refresh
+                sessionStorage.setItem('user', JSON.stringify(updatedUser));
 
                 setFormData({
-                    name: data.name || '',
-                    about: data.about || '',
+                    name: userData.name || '',
+                    about: userData.about || '',
                     avatar: null
                 });
-                if (data.avatar) {
-                    setPreview(`${BASE_URL}${data.avatar}`);
+                if (userData.avatar) {
+                    setPreview(`${BASE_URL}${userData.avatar}`);
                 }
             } catch (error) {
-                console.error("Error fetching user profile", error);
-                // If token is invalid/expired, clear local storage
+                console.error("Error fetching data", error);
+                // If token is invalid/expired, clear session storage
                 if (error.response && error.response.status === 401) {
-                    localStorage.removeItem('user');
+                    sessionStorage.removeItem('user');
                     setUser({});
                 }
             }
         };
 
         if (user.token) {
-            fetchUser();
+            fetchData();
         }
     }, [user.token]);
 
@@ -85,9 +95,9 @@ const Profile = () => {
 
             const response = await api.put('/auth/profile', data, config);
 
-            // Update local storage and state
+            // Update session storage and state
             const updatedUser = { ...user, ...response.data };
-            localStorage.setItem('user', JSON.stringify(updatedUser));
+            sessionStorage.setItem('user', JSON.stringify(updatedUser));
             setUser(updatedUser);
             setIsEditing(false);
             setLoading(false);
@@ -159,18 +169,18 @@ const Profile = () => {
                                 <div className="activity-bars">
                                     <div className="bar-item">
                                         <span>Week</span>
-                                        <div className="progress-bar"><div className="fill" style={{ width: '20%' }}></div></div>
-                                        <span>2</span>
+                                        <div className="progress-bar"><div className="fill" style={{ width: `${Math.min((activityStats.week.group_discussion / 5) * 100, 100)}%` }}></div></div>
+                                        <span>{activityStats.week.group_discussion}</span>
                                     </div>
                                     <div className="bar-item">
                                         <span>Month</span>
-                                        <div className="progress-bar"><div className="fill" style={{ width: '60%' }}></div></div>
-                                        <span>6</span>
+                                        <div className="progress-bar"><div className="fill" style={{ width: `${Math.min((activityStats.month.group_discussion / 15) * 100, 100)}%` }}></div></div>
+                                        <span>{activityStats.month.group_discussion}</span>
                                     </div>
                                     <div className="bar-item">
                                         <span>Year</span>
-                                        <div className="progress-bar"><div className="fill" style={{ width: '80%' }}></div></div>
-                                        <span>18</span>
+                                        <div className="progress-bar"><div className="fill" style={{ width: `${Math.min((activityStats.year.group_discussion / 50) * 100, 100)}%` }}></div></div>
+                                        <span>{activityStats.year.group_discussion}</span>
                                     </div>
                                 </div>
                             </div>
@@ -182,18 +192,18 @@ const Profile = () => {
                                 <div className="activity-bars">
                                     <div className="bar-item">
                                         <span>Week</span>
-                                        <div className="progress-bar"><div className="fill" style={{ width: '10%' }}></div></div>
-                                        <span>1</span>
+                                        <div className="progress-bar"><div className="fill" style={{ width: `${Math.min((activityStats.week.debate / 5) * 100, 100)}%` }}></div></div>
+                                        <span>{activityStats.week.debate}</span>
                                     </div>
                                     <div className="bar-item">
                                         <span>Month</span>
-                                        <div className="progress-bar"><div className="fill" style={{ width: '40%' }}></div></div>
-                                        <span>4</span>
+                                        <div className="progress-bar"><div className="fill" style={{ width: `${Math.min((activityStats.month.debate / 15) * 100, 100)}%` }}></div></div>
+                                        <span>{activityStats.month.debate}</span>
                                     </div>
                                     <div className="bar-item">
                                         <span>Year</span>
-                                        <div className="progress-bar"><div className="fill" style={{ width: '50%' }}></div></div>
-                                        <span>9</span>
+                                        <div className="progress-bar"><div className="fill" style={{ width: `${Math.min((activityStats.year.debate / 50) * 100, 100)}%` }}></div></div>
+                                        <span>{activityStats.year.debate}</span>
                                     </div>
                                 </div>
                             </div>

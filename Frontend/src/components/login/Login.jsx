@@ -27,8 +27,8 @@ const Login = () => {
 
         try {
             const response = await api.post('/auth/login', formData);
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data));
+            sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('user', JSON.stringify(response.data));
             setLoading(false);
             if (response.data.role === 'admin') {
                 navigate('/admin/dashboard');
@@ -37,7 +37,16 @@ const Login = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError(err.response?.data?.message || 'Login failed. Please try again.');
+            const status = err.response?.status;
+            const message = err.response?.data?.message || 'Login failed. Please try again.';
+
+            if (status === 404) {
+                setError(`Server Error (404): API endpoint not found. Check VITE_API_URL.`);
+            } else if (status === 401) {
+                setError(`Authentication Failed (401): ${message}`);
+            } else {
+                setError(message);
+            }
         }
     };
 
@@ -122,8 +131,8 @@ const Login = () => {
                 token: credential
             });
 
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data));
+            sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('user', JSON.stringify(response.data));
             setLoading(false);
             navigate('/dashboard');
         } catch (err) {

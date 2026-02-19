@@ -4,7 +4,7 @@ import api from '../../api/axios';
 import './dashboard.css';
 
 const Progress = () => {
-    const user = JSON.parse(localStorage.getItem('user')) || { name: 'Guest' };
+    const user = JSON.parse(sessionStorage.getItem('user')) || { name: 'Guest' };
     const [stats, setStats] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
@@ -114,7 +114,7 @@ const Progress = () => {
                         </section>
 
                         {/* 3. Recent Feedback List */}
-                        {/* <section className="progress-section">
+                        <section className="progress-section">
                             <div className="progress-card recent-feedback-card">
                                 <h2 className="card-heading">Recent Feedback</h2>
                                 {stats?.recentFeedback?.length > 0 ? (
@@ -138,7 +138,7 @@ const Progress = () => {
                                     <p className="no-feedback">No feedback received yet.</p>
                                 )}
                             </div>
-                        </section> */}
+                        </section>
                     </div>
                 </main>
             </div>

@@ -9,7 +9,8 @@ const {
     updateUserProfile,
     changePassword,
     resendVerification,
-    updateSettings
+    updateSettings,
+    getUserActivity
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const multer = require('multer');
@@ -59,6 +60,7 @@ router.get('/verify-email/:token', verifyEmail);
 router.put('/change-password', protect, changePassword);
 router.post('/resend-verification', protect, resendVerification);
 router.put('/settings', protect, updateSettings);
+router.get('/activity', protect, getUserActivity);
 router.put('/profile', (req, res, next) => {
     log('Profile update request received');
     next();

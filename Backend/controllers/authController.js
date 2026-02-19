@@ -96,7 +96,13 @@ const loginUser = asyncHandler(async (req, res) => {
 
     // Admin Login Logic
     if (isAdmin) {
+        // Debugging: Log if admin env vars are missing (Be careful not to log the actual password in production if possible, or just log existence)
+        if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+            console.error('CRITICAL: ADMIN_EMAIL or ADMIN_PASSWORD environment variables are NOT set.');
+        }
+
         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+            console.log('Admin login successful for:', email);
             res.json({
                 name: 'Admin',
                 email: email,
@@ -105,6 +111,9 @@ const loginUser = asyncHandler(async (req, res) => {
             });
             return;
         } else {
+            console.warn('Admin login failed. Invalid credentials for:', email);
+            // Optional: Log what was expected vs received for debugging (DO NOT DO THIS IN PROD LOGS USUALLY, but for now might be helpful if user is stuck)
+            // console.log(`Expected: ${process.env.ADMIN_EMAIL}, Received: ${email}`);
             res.status(401);
             throw new Error('Invalid Admin Credentials');
         }
@@ -363,6 +372,57 @@ const updateSettings = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Get user activity stats
+// @route   GET /api/auth/activity
+// @access  Private
+const getUserActivity = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const Session = require('../models/Session');
+
+    // Helper to get start date
+    const getStartDate = (days) => {
+        const date = new Date();
+        date.setDate(date.getDate() - days);
+        return date;
+    };
+
+    const getStats = async (days) => {
+        const startDate = getStartDate(days);
+        const stats = await Session.aggregate([
+            {
+                $match: {
+                    attendedParticipants: userId,
+                    startTime: { $gte: startDate }
+                }
+            },
+            {
+                $group: {
+                    _id: '$type',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        const result = { group_discussion: 0, debate: 0 };
+        stats.forEach(s => {
+            if (result[s._id] !== undefined) {
+                result[s._id] = s.count;
+            }
+        });
+        return result;
+    };
+
+    const weekStats = await getStats(7);
+    const monthStats = await getStats(30);
+    const yearStats = await getStats(365);
+
+    res.json({
+        week: weekStats,
+        month: monthStats,
+        year: yearStats
+    });
+});
+
 module.exports = {
     registerUser,
     loginUser,
@@ -372,5 +432,6 @@ module.exports = {
     updateUserProfile,
     changePassword,
     resendVerification,
-    updateSettings
+    updateSettings,
+    getUserActivity
 };

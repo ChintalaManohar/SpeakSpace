@@ -153,8 +153,8 @@ const CreateAccount = () => {
                 token: credential
             });
 
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data));
+            sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('user', JSON.stringify(response.data));
             setLoading(false);
             navigate('/dashboard');
         } catch (err) {

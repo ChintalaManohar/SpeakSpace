@@ -13,6 +13,13 @@ const testAuth = async () => {
         });
         console.log('Registration Success:', registerRes.data);
 
+        const verificationToken = registerRes.data.verificationToken;
+        if (verificationToken) {
+            console.log('\n--- Verifying Email ---');
+            await axios.get(`${API_URL}/verify-email/${verificationToken}`);
+            console.log('Email Verified');
+        }
+
         console.log('\n--- Testing Login ---');
         const loginRes = await axios.post(`${API_URL}/login`, {
             email: uniqueEmail,
@@ -29,6 +36,14 @@ const testAuth = async () => {
             }
         });
         console.log('Protected Route Access Success:', profileRes.data);
+
+        console.log('\n--- Testing Activity Route ---');
+        const activityRes = await axios.get(`${API_URL}/activity`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log('Activity Route Access Success:', JSON.stringify(activityRes.data, null, 2));
 
         console.log('\n--- Verified Successfully ---');
 
