@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import './VerifyEmail.css'; // We'll create a simple CSS file
 
 const VerifyEmail = () => {
     const { token } = useParams();
+    const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [status, setStatus] = useState('loading'); // loading, success, error
 
@@ -15,6 +16,26 @@ const VerifyEmail = () => {
             try {
                 const response = await api.get(`/auth/verify-email/${token}`);
                 setMessage(response.data.message);
+
+                if (response.data.token) {
+                    sessionStorage.setItem('token', response.data.token);
+                    sessionStorage.setItem('user', JSON.stringify({
+                        _id: response.data._id,
+                        name: response.data.name,
+                        email: response.data.email,
+                        role: response.data.role
+                    }));
+
+                    // Auto-redirect after brief delay to show success message
+                    setTimeout(() => {
+                        if (response.data.role === 'admin') {
+                            navigate('/admin/dashboard');
+                        } else {
+                            navigate('/dashboard');
+                        }
+                    }, 2000);
+                }
+
                 setStatus('success');
             } catch (error) {
                 setMessage(error.response?.data?.message || 'Verification failed. Link may be invalid or expired.');
@@ -38,7 +59,7 @@ const VerifyEmail = () => {
                     <div className="status-content">
                         <div className="icon-circle success">✓</div>
                         <p>{message}</p>
-                        <Link to="/login" className="btn-primary">Go to Login</Link>
+                        <p style={{ marginTop: '10px', color: '#666', fontSize: '0.9em' }}>Redirecting to your dashboard...</p>
                     </div>
                 )}
 

@@ -155,7 +155,14 @@ const verifyEmail = asyncHandler(async (req, res) => {
     user.verificationTokenExpires = undefined;
     await user.save();
 
-    res.status(200).json({ message: 'Email verified successfully! You can now log in.' });
+    res.status(200).json({
+        message: 'Email verified successfully! Taking you to the dashboard...',
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token: generateToken(user._id, user.role)
+    });
 });
 
 // @desc    Google Login
