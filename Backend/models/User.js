@@ -59,6 +59,11 @@ const userSchema = mongoose.Schema({
             profileVisibility: { type: String, enum: ['public', 'private'], default: 'public' }
         },
         theme: { type: String, enum: ['light', 'dark'], default: 'light' }
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
     }
 });
 

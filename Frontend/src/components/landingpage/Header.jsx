@@ -13,22 +13,9 @@ const Header = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
-    // Check for user in sessionStorage
-    const storedUser = sessionStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
-    setUser(null);
-    navigate('/');
-  };
 
   const headerStyle = {
     position: 'sticky',
@@ -79,27 +66,12 @@ const Header = () => {
         </nav>
 
         <div className="auth-buttons" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          {user ? (
-            <>
-              <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>Hi, {user.name}</span>
-              <button
-                onClick={handleLogout}
-                className="btn btn-secondary"
-                style={{ padding: '0.5rem 1.25rem' }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login">
-                <button className="btn btn-secondary" style={{ padding: '0.5rem 1.25rem' }}>Login</button>
-              </Link>
-              <Link to="/create-account">
-                <button className="btn btn-primary" style={{ padding: '0.5rem 1.25rem' }}>Get Started</button>
-              </Link>
-            </>
-          )}
+          <Link to="/login">
+            <button className="btn btn-secondary" style={{ padding: '0.5rem 1.25rem' }}>Login</button>
+          </Link>
+          <Link to="/create-account">
+            <button className="btn btn-primary" style={{ padding: '0.5rem 1.25rem' }}>Get Started</button>
+          </Link>
         </div>
       </div>
     </header>

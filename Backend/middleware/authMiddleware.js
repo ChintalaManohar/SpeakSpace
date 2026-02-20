@@ -16,11 +16,12 @@ const protect = asyncHandler(async (req, res, next) => {
             // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-            if (decoded.role === 'admin') {
-                req.user = { role: 'admin' }; // Admin user object
-            } else {
-                // Get user from the token
-                req.user = await User.findById(decoded.id).select('-password');
+            // Get user from the token based on DB
+            req.user = await User.findById(decoded.id).select('-password');
+
+            if (!req.user) {
+                res.status(401);
+                throw new Error('Not authorized, user not found');
             }
 
             next();

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../../index.css';
 
 const Hero = () => {
@@ -49,21 +50,11 @@ const Hero = () => {
                         in a safe, supportive environment.
                     </p>
                     <div style={ctaGroupStyle}>
-                        <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-                            Join a Session
-                        </button>
-                        <button
-                            className="btn btn-secondary"
-                            style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}
-                            onClick={() => {
-                                const element = document.getElementById('how-it-works');
-                                if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            }}
-                        >
-                            How It Works
-                        </button>
+                        <Link to="/login">
+                            <button className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
+                                Join a Session
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

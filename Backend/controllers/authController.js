@@ -52,7 +52,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if (user) {
         // Send verification email
-        const verificationUrl = `http://localhost:5173/verify-email/${verificationToken}`;
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const verificationUrl = `${frontendUrl}/verify-email/${verificationToken}`;
 
         const message = `
             <h1>Verify Your Email</h1>
@@ -62,10 +63,15 @@ const registerUser = asyncHandler(async (req, res) => {
         `;
 
         try {
-            await sendEmail({
+            // Send verification email asynchronously to not block the response
+            sendEmail({
                 email: user.email,
                 subject: 'SpeakSpace Account Verification',
                 message
+            }).catch(async (error) => {
+                console.error('Background Email send failed:', error);
+                // Optional: Cleanup user if we know the email was completely invalid
+                // await User.findByIdAndDelete(user._id);
             });
 
             res.status(201).json({
@@ -75,11 +81,9 @@ const registerUser = asyncHandler(async (req, res) => {
                 message: 'Registration successful! Please check your email to verify your account.'
             });
         } catch (error) {
-            console.error('Email send failed:', error);
-            // Delete user if email fails (optional, but good practice to avoid zombie accounts)
-            await User.findByIdAndDelete(user._id);
+            console.error('Registration finish failed:', error);
             res.status(500);
-            throw new Error('Email could not be sent. Please check server logs.');
+            throw new Error('Registration failed during completion process.');
         }
 
     } else {
@@ -92,32 +96,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password, isAdmin } = req.body;
-
-    // Admin Login Logic
-    if (isAdmin) {
-        // Debugging: Log if admin env vars are missing (Be careful not to log the actual password in production if possible, or just log existence)
-        if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
-            console.error('CRITICAL: ADMIN_EMAIL or ADMIN_PASSWORD environment variables are NOT set.');
-        }
-
-        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-            console.log('Admin login successful for:', email);
-            res.json({
-                name: 'Admin',
-                email: email,
-                role: 'admin',
-                token: generateToken(null, 'admin')
-            });
-            return;
-        } else {
-            console.warn('Admin login failed. Invalid credentials for:', email);
-            // Optional: Log what was expected vs received for debugging (DO NOT DO THIS IN PROD LOGS USUALLY, but for now might be helpful if user is stuck)
-            // console.log(`Expected: ${process.env.ADMIN_EMAIL}, Received: ${email}`);
-            res.status(401);
-            throw new Error('Invalid Admin Credentials');
-        }
-    }
+    const { email, password } = req.body;
 
     // Check for user email
     const user = await User.findOne({ email });
@@ -132,7 +111,8 @@ const loginUser = asyncHandler(async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
-            token: generateToken(user._id)
+            role: user.role,
+            token: generateToken(user._id, user.role)
         });
     } else {
         res.status(401);
@@ -209,8 +189,9 @@ const googleLogin = asyncHandler(async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
+            role: user.role,
             avatar: user.avatar,
-            token: generateToken(user._id)
+            token: generateToken(user._id, user.role)
         });
 
     } catch (error) {
@@ -272,7 +253,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             email: updatedUser.email,
             avatar: updatedUser.avatar,
             about: updatedUser.about,
-            token: generateToken(updatedUser._id)
+            role: updatedUser.role,
+            token: generateToken(updatedUser._id, updatedUser.role)
         });
     } else {
         res.status(404);
@@ -324,7 +306,8 @@ const resendVerification = asyncHandler(async (req, res) => {
     user.verificationTokenExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
     await user.save();
 
-    const verificationUrl = `http://localhost:5173/verify-email/${verificationToken}`;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const verificationUrl = `${frontendUrl}/verify-email/${verificationToken}`;
 
     const message = `
         <h1>Verify Your Email</h1>
@@ -364,7 +347,8 @@ const updateSettings = asyncHandler(async (req, res) => {
             email: updatedUser.email,
             avatar: updatedUser.avatar,
             settings: updatedUser.settings,
-            token: generateToken(updatedUser._id)
+            role: updatedUser.role,
+            token: generateToken(updatedUser._id, updatedUser.role)
         });
     } else {
         res.status(404);

@@ -7,8 +7,7 @@ import '../../index.css';
 const Login = () => {
     const [formData, setFormData] = useState({
         email: '',
-        password: '',
-        isAdmin: false
+        password: ''
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -194,18 +193,6 @@ const Login = () => {
                                 </svg>
                             )}
                         </span>
-                    </div>
-
-                    <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                        <input
-                            type="checkbox"
-                            name="isAdmin"
-                            id="isAdmin"
-                            checked={formData.isAdmin}
-                            onChange={handleNameChange}
-                            style={{ marginRight: '0.5rem' }}
-                        />
-                        <label htmlFor="isAdmin" style={{ ...labelStyle, marginBottom: 0, cursor: 'pointer' }}>Log in as Admin</label>
                     </div>
 
                     <button
