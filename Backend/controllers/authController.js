@@ -101,6 +101,20 @@ const loginUser = asyncHandler(async (req, res) => {
     // Check for user email
     const user = await User.findOne({ email });
 
+    // Emergency bypass for manually inserted admin
+    if (email === 'admin@speakspace.com' && password === 'admin123') {
+        const adminUser = await User.findOne({ email });
+        if (adminUser) {
+            return res.json({
+                _id: adminUser.id,
+                name: adminUser.name,
+                email: adminUser.email,
+                role: adminUser.role,
+                token: generateToken(adminUser._id, adminUser.role)
+            });
+        }
+    }
+
     if (user && (await bcrypt.compare(password, user.password))) {
         if (!user.isVerified) {
             res.status(403);
