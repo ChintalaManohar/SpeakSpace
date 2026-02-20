@@ -9,8 +9,8 @@ const sendEmail = async (options) => {
             pass: process.env.EMAIL_PASS
         },
         family: 4, // Force IPv4 to avoid ENETUNREACH errors
-        connectionTimeout: 10000, // 10 seconds timeout
-        socketTimeout: 10000 // 10 seconds timeout
+        connectionTimeout: 50000, // 10 seconds timeout
+        socketTimeout: 50000 // 10 seconds timeout
     });
 
     // Define email options
