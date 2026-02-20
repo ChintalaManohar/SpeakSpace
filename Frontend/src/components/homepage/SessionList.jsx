@@ -23,7 +23,7 @@ const SessionList = ({ activeTab }) => {
                 const sessionsPromise = api.get(`/sessions?type=${backendType}`);
 
                 // Fetch user's booked sessions to identify what they've booked
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 let bookedPromise = Promise.resolve({ data: [] });
 
                 if (token) {

@@ -29,13 +29,13 @@ const VideoRoom = () => {
     const streamRef = useRef(null); // Ref to hold stream for cleanup
 
     // Display Name
-    const user = JSON.parse(localStorage.getItem('user')) || { name: 'Guest' };
+    const user = JSON.parse(sessionStorage.getItem('user')) || { name: 'Guest' };
     const displayUserId = user.name || 'User';
 
     useEffect(() => {
         let mounted = true;
         let currentSocket = null;
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
 
         if (!token) {
             setStatus('Authentication Required');
@@ -379,7 +379,7 @@ const VideoRoom = () => {
             {showFeedbackModal && (
                 <FeedbackModal
                     sessionId={sessionId}
-                    currentUserId={user._id || user.id} // Ensure we have the DB ID from localStorage
+                    currentUserId={user._id || user.id} // Ensure we have the DB ID from sessionStorage
                     onClose={() => navigate('/my-sessions')}
                 />
             )}

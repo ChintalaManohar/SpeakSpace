@@ -7,7 +7,7 @@ import './dashboard.css';
 const Sessions = () => {
     const [activeTab, setActiveTab] = useState('group'); // 'group' or 'debate'
     // Mock user data - in reality, this would come from context or props
-    const user = JSON.parse(localStorage.getItem('user')) || { name: 'Guest' };
+    const user = JSON.parse(sessionStorage.getItem('user')) || { name: 'Guest' };
 
     return (
         <div className="dashboard-container">

@@ -18,8 +18,8 @@ const TopNavbar = ({ user }) => {
 
     const handleLogout = () => {
         // Clear authentication token and user data
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
 
         // Redirect to public landing page
         navigate('/');

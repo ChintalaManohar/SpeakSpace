@@ -24,7 +24,7 @@ const Settings = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 if (!token) return;
 
                 const res = await api.get('/auth/me');
@@ -64,7 +64,7 @@ const Settings = () => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             await api.put('/auth/change-password', {
                 currentPassword: passwords.currentPassword,
                 newPassword: passwords.newPassword
@@ -80,7 +80,7 @@ const Settings = () => {
 
     const resendVerification = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             await api.post('/auth/resend-verification', {});
             setMessage({ type: 'success', text: 'Verification email sent!' });
         } catch (err) {
@@ -123,7 +123,7 @@ const Settings = () => {
 
     const saveSettings = async (newSettings) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             await api.put('/auth/settings', { settings: newSettings });
             // Optional: Update local user context if exists
         } catch (err) {

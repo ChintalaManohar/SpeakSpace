@@ -8,7 +8,7 @@ import './dashboard.css';
 
 const DashboardHome = () => {
     // Mock user data
-    const user = JSON.parse(localStorage.getItem('user')) || { name: 'Guest' };
+    const user = JSON.parse(sessionStorage.getItem('user')) || { name: 'Guest' };
     const firstName = (user?.name || 'User').split(' ')[0];
 
     // State for stats

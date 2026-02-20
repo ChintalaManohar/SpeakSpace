@@ -7,7 +7,7 @@ import './dashboard.css';
 
 const MySessions = () => {
     const [activeTab, setActiveTab] = useState('group'); // 'group' or 'debate'
-    const user = JSON.parse(localStorage.getItem('user')) || { name: 'Guest' };
+    const user = JSON.parse(sessionStorage.getItem('user')) || { name: 'Guest' };
 
     const [bookedSessions, setBookedSessions] = useState([]);
     const [loading, setLoading] = useState(true);
