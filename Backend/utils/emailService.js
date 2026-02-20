@@ -4,13 +4,16 @@ const sendEmail = async (options) => {
     // Create a transporter
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
+        port: 587,
+        secure: false, // false for 587, uses STARTTLS
+        requireTLS: true,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
         },
-        family: 4 // Force IPv4 to avoid ENETUNREACH errors on IPv6-broken cloud hosts
+        family: 4, // Force IPv4
+        logger: true,
+        debug: true
     });
 
     // Define email options
