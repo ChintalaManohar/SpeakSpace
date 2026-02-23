@@ -52,7 +52,7 @@
 .profile-cover-new {
     height: 240px;
     /* Taller cover */
-    background: linear-gradient(1deg, #7adda0, #77d8ae, #77d599, #38ca55);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     background-size: 300% 300%;
     border-radius: 16px 16px 0 0;
     animation: gradientShift 10s ease infinite;
@@ -330,14 +330,14 @@
 
 .progress-bar .fill {
     height: 100%;
-    background: linear-gradient(90deg, #6366f1, #4f46e5);
+    background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
     border-radius: 6px;
     width: 0;
     /* JS sets this inline, but we want animation */
     /* Since width comes from inline style, we rely on the transition */
     transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
-    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
 /* Add a shimmer effect to bars */
@@ -453,10 +453,10 @@
 
 .form-group input[type="text"]:focus,
 .form-group textarea:focus {
-    border-color: #6366f1;
+    border-color: var(--primary-color);
     background-color: white;
     outline: none;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
 .modal-actions {
@@ -484,20 +484,20 @@
 
 .btn-save {
     padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-dark) 100%);
     color: white;
     border-radius: 10px;
     font-weight: 600;
     border: none;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
 }
 
 .btn-save:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 10px rgba(79, 70, 229, 0.3);
-    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    box-shadow: 0 6px 10px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
 }
 
 .btn-save:disabled {

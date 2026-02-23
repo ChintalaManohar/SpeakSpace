@@ -129,9 +129,9 @@
 }
 
 /* 10+ Users */
-.video-grid[class*="count-1"]0,
-.video-grid[class*="count-1"]1,
-.video-grid[class*="count-1"]2 {
+.video-grid[class*="count-10"],
+.video-grid[class*="count-11"],
+.video-grid[class*="count-12"] {
     grid-template-columns: repeat(4, minmax(0, auto));
     grid-template-rows: repeat(3, minmax(0, 1fr));
 }
@@ -194,19 +194,19 @@
     height: 50px;
     border-radius: 50%;
     border: none;
-    background: #3b82f6;
+    background: var(--primary-color);
     color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
     font-size: 20px;
     transition: transform 0.1s, background 0.2s;
 }
 
 .control-btn:hover {
-    background: #2563eb;
+    background: var(--primary-hover);
     transform: scale(1.05);
 }
 

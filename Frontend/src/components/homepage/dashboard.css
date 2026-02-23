@@ -101,8 +101,8 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #3b82f6;
-    /* Blue active line like reference */
+    background-color: var(--primary-color);
+    /* Emerald active line */
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
@@ -268,10 +268,8 @@
 }
 
 .sidebar-item.active {
-    background-color: #EFF6FF;
-    /* Light blue bg */
-    color: #3B82F6;
-    /* Blue text */
+    background-color: var(--secondary-color);
+    color: var(--primary-dark);
     font-weight: 600;
 }
 
@@ -334,8 +332,8 @@
     left: 40px;
     width: 120px;
     height: 120px;
-    background-color: #E0E7FF;
-    color: #4F46E5;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
     border-radius: 50%;
     border: 4px solid white;
     display: flex;
@@ -448,7 +446,7 @@
 .stat-value {
     font-size: 2rem;
     font-weight: 800;
-    color: #4f46e5;
+    color: var(--primary-color);
     /* Primary color */
 }
 
@@ -652,7 +650,7 @@
 }
 
 .join-btn {
-    background-color: #2563EB;
+    background-color: var(--primary-color);
     color: white;
 }
 
@@ -708,12 +706,12 @@
 
 /* Hero Section */
 .home-hero {
-    background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     border-radius: 20px;
     padding: 3rem 4rem;
     color: white;
     margin-bottom: 2rem;
-    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -815,17 +813,17 @@
 
 .btn-primary-soft {
     display: inline-block;
-    background-color: #eff6ff;
-    color: #3b82f6;
+    background-color: var(--secondary-color);
+    color: var(--primary-dark);
     font-weight: 600;
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: var(--border-radius-sm);
     text-decoration: none;
-    transition: background-color 0.2s;
+    transition: var(--transition-normal);
 }
 
 .btn-primary-soft:hover {
-    background-color: #dbeafe;
+    background-color: var(--primary-light);
 }
 
 /* Progress Stats */
@@ -913,11 +911,11 @@
 }
 
 .action-card:hover {
-    border-color: #3b82f6;
-    background-color: #ffffff;
+    border-color: var(--primary-light);
+    background-color: var(--bg-color);
     transform: translateY(-2px);
-    color: #3b82f6;
-    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+    color: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
 .action-icon {
@@ -933,7 +931,7 @@
 }
 
 .action-card:hover .action-icon {
-    background-color: #eff6ff;
+    background-color: var(--secondary-color);
 }
 
 /* Suggestions Section */
@@ -942,8 +940,8 @@
 }
 
 .suggestion-box {
-    background: linear-gradient(to right, #fdf4ff, #fae8ff);
-    border: 1px solid #f0abfc;
+    background: linear-gradient(to right, var(--secondary-color), var(--bg-color));
+    border: 1px solid var(--primary-light);
     border-radius: 12px;
     padding: 1.5rem 2rem;
     display: flex;
@@ -965,7 +963,7 @@
 
 .suggestion-content h4 {
     margin: 0 0 0.5rem 0;
-    color: #86198f;
+    color: var(--primary-dark);
     font-size: 1.1rem;
     font-weight: 700;
 }
@@ -973,7 +971,7 @@
 .suggestion-content ul {
     margin: 0;
     padding-left: 1.25rem;
-    color: #4a044e;
+    color: var(--text-secondary);
 }
 
 .suggestion-content li {
@@ -1347,15 +1345,15 @@
 }
 
 .feedback-comment-box {
-    background: #f0f9ff;
+    background: var(--secondary-color);
     padding: 1rem 1rem 1rem 2.5rem;
-    border-radius: 8px;
+    border-radius: var(--border-radius-sm);
     position: relative;
-    color: #334155;
+    color: var(--text-secondary);
     font-style: italic;
     font-size: 0.95rem;
     line-height: 1.5;
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid var(--primary-color);
 }
 
 .quote-icon {
@@ -1363,7 +1361,7 @@
     top: 0.25rem;
     left: 0.75rem;
     font-size: 2.5rem;
-    color: #bfdbfe;
+    color: var(--primary-light);
     font-family: serif;
     line-height: 1;
 }

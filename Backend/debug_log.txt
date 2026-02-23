@@ -1,1 +1,11 @@
 2026-02-20T13:36:32.412Z - Server started on port 5000
+2026-02-20T14:02:36.616Z - GET /api/sessions
+2026-02-20T14:02:59.194Z - GET /api/sessions?type=group_discussion
+2026-02-20T14:03:48.012Z - GET /api/sessions?type=group_discussion
+2026-02-20T17:23:49.124Z - POST /api/auth/register
+2026-02-20T19:41:36.343Z - Server started on port 5000
+2026-02-23T14:03:26.456Z - Server started on port 5000
+2026-02-23T14:09:25.447Z - Server started on port 5000
+2026-02-23T14:16:45.306Z - Server started on port 5000
+2026-02-23T14:21:20.453Z - Server started on port 5000
+2026-02-23T14:23:50.400Z - Server started on port 5000

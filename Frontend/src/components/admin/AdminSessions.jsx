@@ -323,7 +323,7 @@ const AdminSessions = () => {
                             <td style={tdStyle}>
                                 <button
                                     onClick={() => handleEdit(session)}
-                                    style={{ color: '#2563eb', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, marginRight: '1rem' }}
+                                    style={{ color: 'var(--primary-color)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, marginRight: '1rem' }}
                                 >
                                     Edit
                                 </button>

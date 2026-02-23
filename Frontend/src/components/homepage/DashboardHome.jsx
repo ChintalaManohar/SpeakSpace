@@ -102,13 +102,13 @@ const DashboardHome = () => {
                             <div className="actions-grid">
                                 <Link to="/sessions" className="action-card">
                                     <div className="action-icon">
-                                        <Mic size={28} color="#4f46e5" />
+                                        <Mic size={28} color="#10B981" />
                                     </div>
                                     <span>Explore Sessions</span>
                                 </Link>
                                 <Link to="/my-sessions" className="action-card">
                                     <div className="action-icon">
-                                        <Calendar size={28} color="#3b82f6" />
+                                        <Calendar size={28} color="#10B981" />
                                     </div>
                                     <span>My Sessions</span>
                                 </Link>

@@ -1,27 +1,53 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-    // Initialize Resend with the API key from environment variables
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
     try {
-        const { data, error } = await resend.emails.send({
-            // Note: Until you verify a custom domain in Resend, 
-            // you must strictly send from 'onboarding@resend.dev'
-            from: 'SpeakSpace <onboarding@resend.dev>',
+        // 1. Validate environment variables before trying to send
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error('❌ EMAIL ERROR: Missing EMAIL_USER or EMAIL_PASS in environment variables.');
+            throw new Error('Email credentials are not fully configured.');
+        }
+
+        // 2. Create the transporter securely
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        // 3. (Optional but helpful) Verify connection configuration
+        try {
+            await transporter.verify();
+            console.log('✅ Nodemailer: Connection strictly verified with Gmail SMTP server.');
+        } catch (verifyError) {
+            console.error('❌ Nodemailer Verification Failed:', verifyError.message);
+            console.error('👉 Tip: Check if your Google App Password is correct or if your Gmail account requires 2FA adjustments.');
+            throw verifyError;
+        }
+
+        const mailOptions = {
+            from: `SpeakSpace <${process.env.EMAIL_USER}>`,
             to: options.email,
             subject: options.subject,
             html: options.message
-        });
+        };
 
-        if (error) {
-            console.error('Resend API Error:', error);
-            throw error;
-        }
+        // 4. Send the email and log success
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ Nodemailer Success: Email successfully delivered to ${options.email} (MessageID: ${info.messageId})`);
 
-        console.log('Email successfully sent via Resend API:', data.id);
+        return info;
+
     } catch (err) {
-        console.error('Failed to send email via Resend:', err);
+        console.error('----------------------------------------------------');
+        console.error('❌ FATAL EMAIL DELIVERY ERROR');
+        console.error(`Attempted target: ${options.email}`);
+        console.error(`Error Code: ${err.code || 'N/A'}`);
+        console.error(`Error Message: ${err.message}`);
+        console.error(`Full Stack Trace: ${err.stack}`);
+        console.error('----------------------------------------------------');
         throw err;
     }
 };
