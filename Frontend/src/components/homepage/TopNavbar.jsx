@@ -12,6 +12,15 @@ const TopNavbar = ({ user }) => {
     const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'U';
     const userName = user?.name || 'User';
 
+    const getAvatarUrl = (avatarPath) => {
+        if (!avatarPath) return null;
+        if (avatarPath.startsWith('http')) return avatarPath;
+        const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
+        return `${BASE_URL}${avatarPath}`;
+    };
+
+    const avatarUrl = getAvatarUrl(user?.avatar);
+
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -68,8 +77,12 @@ const TopNavbar = ({ user }) => {
                     onClick={toggleDropdown}
                     style={{ textDecoration: 'none' }}
                 >
-                    <div className="profile-avatar">
-                        {userInitial}
+                    <div className="profile-avatar" style={{ overflow: 'hidden', padding: 0 }}>
+                        {avatarUrl ? (
+                            <img src={avatarUrl} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            userInitial
+                        )}
                     </div>
                     <span className="profile-name">{userName.split(' ')[0]}</span>
                     {/* Optional chevron icon can be added here if available */}

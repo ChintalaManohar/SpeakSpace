@@ -237,7 +237,7 @@ const Profile = () => {
                                     <input
                                         type="file"
                                         id="modal-avatar-upload"
-                                        accept="image/*"
+                                        accept="image/jpeg, image/png, image/jpg, image/gif"
                                         onChange={handleAvatarChange}
                                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
                                     />
