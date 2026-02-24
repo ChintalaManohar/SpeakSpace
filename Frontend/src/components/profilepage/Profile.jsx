@@ -11,8 +11,13 @@ const Profile = () => {
         about: user.about || '',
         avatar: null
     });
-    const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
-    const [preview, setPreview] = useState(user.avatar ? `${BASE_URL}${user.avatar}` : null);
+    const getAvatarUrl = (avatarPath) => {
+        if (!avatarPath) return null;
+        if (avatarPath.startsWith('http')) return avatarPath;
+        const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace('/api', '');
+        return `${BASE_URL}${avatarPath}`;
+    };
+    const [preview, setPreview] = useState(getAvatarUrl(user.avatar));
     const [loading, setLoading] = useState(false);
     const [activityStats, setActivityStats] = useState({
         week: { group_discussion: 0, debate: 0 },
@@ -46,7 +51,7 @@ const Profile = () => {
                     avatar: null
                 });
                 if (userData.avatar) {
-                    setPreview(`${BASE_URL}${userData.avatar}`);
+                    setPreview(getAvatarUrl(userData.avatar));
                 }
             } catch (error) {
                 console.error("Error fetching data", error);
@@ -121,7 +126,7 @@ const Profile = () => {
             about: user.about || '',
             avatar: null
         });
-        setPreview(user.avatar ? `${BASE_URL}${user.avatar}` : null);
+        setPreview(getAvatarUrl(user.avatar));
     };
 
     return (

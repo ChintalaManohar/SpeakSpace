@@ -242,25 +242,26 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
         if (req.file) {
             log(`File received in controller: ${JSON.stringify(req.file)}`);
-            console.log('File received in controller:', req.file);
+            console.log('File received in controller:', req.file.path);
 
-            // Delete old avatar if it exists
-            if (user.avatar) {
+            // Delete old local avatar if it exists
+            if (user.avatar && user.avatar.startsWith('/uploads/')) {
                 const oldAvatarPath = path.join(__dirname, '..', user.avatar);
                 if (fs.existsSync(oldAvatarPath)) {
                     fs.unlink(oldAvatarPath, (err) => {
                         if (err) {
-                            console.error('Failed to delete old avatar:', err);
-                            log(`Failed to delete old avatar: ${err}`);
+                            console.error('Failed to delete old local avatar:', err);
+                            log(`Failed to delete old local avatar: ${err}`);
                         } else {
-                            console.log('Old avatar deleted successfully');
-                            log('Old avatar deleted successfully');
+                            console.log('Old local avatar deleted successfully');
+                            log('Old local avatar deleted successfully');
                         }
                     });
                 }
             }
 
-            user.avatar = `/uploads/${req.file.filename}`;
+            // Save the Cloudinary secure URL
+            user.avatar = req.file.path;
         } else {
             log('No file received in controller');
             console.log('No file received in controller');

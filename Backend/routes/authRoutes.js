@@ -15,22 +15,23 @@ const {
 const { protect } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
 const log = require('../utils/fileLogger');
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 // Configure Multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../uploads/');
-        log(`Multer destination: ${uploadPath}`);
-        console.log('Multer destination:', uploadPath);
-        cb(null, uploadPath); // Make sure this folder exists
-    },
-    filename: function (req, file, cb) {
-        const filename = file.fieldname + '-' + Date.now() + path.extname(file.originalname);
-        log(`Multer filename: ${filename}`);
-        console.log('Multer filename:', filename);
-        cb(null, filename);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'speakspace_avatars',
+        allowed_formats: ['jpeg', 'jpg', 'png', 'gif']
     }
 });
 
