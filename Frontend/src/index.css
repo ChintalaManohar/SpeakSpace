@@ -269,3 +269,178 @@ h3 {
   font-size: 1rem;
   line-height: 1.6;
 }
+
+/* --- Mobile Responsiveness --- */
+
+/* Landing Page Header Styles */
+.landing-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  padding: 1rem 0;
+}
+
+.landing-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+}
+
+.landing-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.landing-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.landing-logo img {
+  height: 32px;
+  width: auto;
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+}
+
+.desktop-nav a {
+  margin: 0 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.auth-buttons button {
+  padding: 0.5rem 1.25rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.mobile-menu-overlay {
+  display: none;
+}
+
+/* General Layout Tweaks for Mobile */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Header Changes */
+  .desktop-nav,
+  .auth-buttons {
+    display: none !important;
+    /* Hide desktop nav and buttons on mobile by default */
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile Dropdown Menu */
+  .mobile-menu-overlay {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: var(--shadow-md);
+    padding: 1rem;
+    gap: 1rem;
+    border-top: 1px solid var(--border-light);
+    animation: slideDown 0.2s ease-out;
+  }
+
+  .mobile-menu-overlay a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .mobile-menu-overlay a:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-auth-buttons button {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  /* Global sections padding */
+  .sessions {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

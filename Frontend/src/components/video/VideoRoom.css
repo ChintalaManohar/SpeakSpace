@@ -242,3 +242,60 @@
 .log-entry {
     margin-bottom: 4px;
 }
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .video-room-container {
+        padding: 10px;
+        height: 100vh;
+        height: 100dvh;
+        /* dynamic viewport height */
+    }
+
+    .video-room-header {
+        padding: 8px 10px;
+        height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .room-title {
+        font-size: 16px;
+    }
+
+    .leave-btn {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .video-grid {
+        padding: 5px;
+        gap: 5px;
+        /* Default switch to vertical stacked layout for many users on vertical screen */
+    }
+
+    /* 2 Users */
+    .video-grid.count-2 {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+    }
+
+    .controls-container {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+
+    .user-label {
+        bottom: 10px;
+        left: 10px;
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+}

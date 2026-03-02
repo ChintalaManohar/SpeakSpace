@@ -4,7 +4,7 @@ import './dashboard.css';
 
 import logo from '../../assets/logo.png';
 
-const TopNavbar = ({ user }) => {
+const TopNavbar = ({ user, toggleSidebar }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -55,11 +55,16 @@ const TopNavbar = ({ user }) => {
 
     return (
         <nav className="dashboard-navbar">
-            <div className="nav-left">
-                <div className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="nav-left" style={{ display: 'flex', alignItems: 'center' }}>
+                <button className="mobile-sidebar-toggle" onClick={toggleSidebar}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <Link to="/dashboard" className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
                     <img src={logo} alt="Logo" style={{ height: '28px', width: 'auto' }} />
                     SpeakSpace
-                </div>
+                </Link>
             </div>
 
             <div className="nav-center">
@@ -92,7 +97,6 @@ const TopNavbar = ({ user }) => {
                     <div className="profile-dropdown">
                         <div className="dropdown-header">
                             <div className="dropdown-user-name">{userName}</div>
-                            {/* <div className="dropdown-user-email">{user?.email || 'user@example.com'}</div> */}
                         </div>
 
                         <div className="dropdown-divider"></div>
@@ -102,12 +106,6 @@ const TopNavbar = ({ user }) => {
                         </Link>
                         <Link to="/settings" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
                             Settings
-                        </Link>
-
-                        <div className="dropdown-divider"></div>
-
-                        <Link to="/help" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
-                            Help / Guide
                         </Link>
 
                         <div className="dropdown-divider"></div>

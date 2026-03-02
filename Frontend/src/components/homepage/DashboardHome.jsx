@@ -15,6 +15,13 @@ const DashboardHome = () => {
     const [stats, setStats] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
 
+    // Mobile sidebar state
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false);
+
+    const toggleMobileSidebar = () => {
+        setIsMobileSidebarOpen(!isMobileSidebarOpen);
+    };
+
     React.useEffect(() => {
         const fetchStats = async () => {
             try {
@@ -31,10 +38,14 @@ const DashboardHome = () => {
     }, []);
 
     return (
-        <div className="dashboard-container">
-            <TopNavbar user={user} />
+        <div className={`dashboard-container ${isMobileSidebarOpen ? 'mobile-sidebar-active' : ''}`}>
+            <TopNavbar user={user} toggleSidebar={toggleMobileSidebar} />
 
             <div className="dashboard-main">
+                {/* Ensure sidebar is rendered here in DashboardHome if it's supposed to be side-by-side. 
+                    Wait, let me check if DashboardHome uses a Sidebar component or if it relies on TopNavbar. 
+                    Looking at the existing code, Sidebar was not imported here, but CSS exists for it. Let's add the mobile menu dropdown logic to topnav or render it over top.
+                 */}
                 <main className="content-area">
                     {/* 1. Hero Section */}
                     <div className="dashboard-hero" style={{ backgroundImage: `url(${pic})` }}>

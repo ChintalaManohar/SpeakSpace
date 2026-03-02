@@ -228,6 +228,10 @@
     color: var(--text-secondary);
 }
 
+.mobile-sidebar-toggle {
+    display: none;
+}
+
 /* Sidebar */
 .dashboard-sidebar {
     width: 250px;
@@ -1172,6 +1176,17 @@
 
 /* --- Mobile Responsiveness --- */
 
+@media (max-width: 1024px) {
+    .dashboard-home-content {
+        padding: 2rem 3rem;
+    }
+
+    .info-cards-section,
+    .activity-stats-grid {
+        gap: 1.5rem;
+    }
+}
+
 @media (max-width: 768px) {
 
     /* Dashboard Layout */
@@ -1189,15 +1204,116 @@
     /* Navbar adjustments */
     .dashboard-navbar {
         padding: 0 1rem;
+        height: 60px;
     }
 
     .nav-brand {
         font-size: 1.2rem;
     }
 
+    .nav-links {
+        display: none;
+        /* Hide heavy nav links on mobile */
+    }
+
     .profile-name {
         display: none;
         /* Hide name on mobile to save space */
+    }
+
+    .nav-center {
+        display: none;
+        /* Hide nav center */
+    }
+
+    /* Sidebar adjustments */
+    .dashboard-sidebar {
+        display: none;
+        /* Hide sidebar completely on mobile screens */
+    }
+
+    .mobile-sidebar-active .dashboard-sidebar {
+        display: flex;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        bottom: 0;
+        z-index: 1000;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        width: 250px;
+    }
+
+    .mobile-sidebar-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    /* Home Content Tweaks */
+    .dashboard-home-content {
+        padding: 1.5rem;
+    }
+
+    .home-hero {
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+
+    .home-hero h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+    }
+
+    .home-hero p {
+        font-size: 1rem;
+    }
+
+    .info-cards-section {
+        grid-template-columns: 1fr;
+        /* Stack cards vertically */
+        gap: 1.5rem;
+    }
+
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns for actions */
+        gap: 1rem;
+    }
+
+    .session-card-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .card-left,
+    .card-middle,
+    .card-right {
+        width: 100%;
+        flex: none;
+        justify-content: flex-start;
+    }
+
+    .card-middle {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .card-right {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .action-btn {
+        max-width: 100%;
+        /* Full width button */
     }
 
     /* Profile Header */
@@ -1264,6 +1380,44 @@
     .stat-label {
         font-size: 0.9rem;
         order: 1;
+    }
+
+    /* Sessions Layout Adjustments */
+    .sessions-grid,
+    .section-heading {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    /* Progress Page Customizations */
+    .progress-content {
+        padding: 1.5rem;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .overview-stats {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .stat-divider-vertical,
+    .stat-divider {
+        display: none;
+        /* Remove vertical dividers on mobile */
+    }
+
+    .progress-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .confidence-trend {
+        width: 100%;
+        justify-content: center;
     }
 }
 
